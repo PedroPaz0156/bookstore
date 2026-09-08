@@ -1,16 +1,16 @@
-import pytest 
+import pytest
 
-from product.models import Product
+from product.models.product import Product 
 
 @pytest.mark.django_db
 def test_product_creation():
     product = Product.objects.create(
-        title="Test Product",
+        name="Test Product",
         description="This is a test product.",
-        price=19.99
+        price=20,
     )
 
-    assert product.title == "Test Product"
+    assert product.name == "Test Product"
     assert product.description == "This is a test product."
-    assert product.price == 19.99
+    assert product.price == 20
     assert product.id is not None

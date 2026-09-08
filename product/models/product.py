@@ -8,3 +8,8 @@ class Product(models.Model):
     price = models.PositiveIntegerField(null=True)
     active = models.BooleanField(default=True)
     category = models.ManyToManyField(Category, blank=True)
+
+    def set(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        return self

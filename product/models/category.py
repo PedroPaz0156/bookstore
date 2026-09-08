@@ -8,3 +8,8 @@ class Category(models.Model):
 
     def __unicode__(self): 
         return self.title
+
+    def set(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        return self
