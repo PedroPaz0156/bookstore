@@ -1,28 +1,21 @@
 import factory
-
 from product.models import Category, Product
 
+
 class CategoryFactory(factory.django.DjangoModelFactory):
-    title = factory.Faker('word')
-    slug = factory.Faker('slug')
-    description = factory.Faker('sentence')
+    title = factory.Faker("word")
+    slug = factory.Sequence(lambda n: f"category-{n}")
+    description = factory.Faker("sentence")
     active = True
 
     class Meta:
         model = Category
 
-class ProductFactory(factory.django.DjangoModelFactory):
-    title = factory.Faker('word')
-    price = factory.Faker('pydecimal', left_digits=3, right_digits=2, positive=True)
-    category = factory.SubFactory(CategoryFactory)
 
-    @factory.post_generation
-    def category(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            for category in extracted:
-                self.category.add(category)
+class ProductFactory(factory.django.DjangoModelFactory):
+    name = factory.Faker("word")
+    price = factory.Faker("pyint", min_value=1, max_value=1000)
+    category = factory.SubFactory(CategoryFactory)
 
     class Meta:
         model = Product

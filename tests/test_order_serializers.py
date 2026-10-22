@@ -36,4 +36,4 @@ def test_order_serializer():
     assert serialized_data["product"][0]["description"] == order_data["product"][0]["description"]
     assert serialized_data["product"][0]["price"] == order_data["product"][0]["price"]
     assert serialized_data["user"]["username"] == order_data["user"]["username"]
-    assert serialized_data["user"]["password"] == order_data["user"]["password"]
+    assert "password" not in serialized_data["user"]

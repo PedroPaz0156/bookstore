@@ -7,16 +7,27 @@ from product.models.product import Product
 
 @pytest.mark.django_db
 def test_order_creation():
-    order = Order.objects.create(
-        product=Product.objects.create(name="Test Product",
-                                        description="This is a test product.", 
-                                        price=20),
-        user=User.objects.create(username="testuser", password="testpassword"),
+    user = User.objects.create_user(
+        username="testuser",
+        password="testpassword",
     )
 
-    assert order.product.name == "Test Product"
-    assert order.product.description == "This is a test product."
-    assert order.product.price == 20
+    product = Product.objects.create(
+        name="Test Product",
+        description="This is a test product.",
+        price=20,
+    )
+
+    order = Order.objects.create(user=user)
+    order.product.set([product])
+
+    assert order.product.count() == 1
+
+    saved_product = order.product.first()
+    assert saved_product.name == "Test Product"
+    assert saved_product.description == "This is a test product."
+    assert saved_product.price == 20
+
     assert order.user.username == "testuser"
-    assert order.user.password == "testpassword"
+    assert order.user.check_password("testpassword")
     assert order.id is not None
