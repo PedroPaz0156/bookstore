@@ -1,6 +1,8 @@
+from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken.views import obtain_auth_token
 from django.contrib import admin
 from django.urls import include, path, re_path
-from rest_framework.routers import DefaultRouter
+
 from product.views import CategoryViewSet, ProductViewSet
 from order.views import OrderViewSet
 
@@ -15,4 +17,5 @@ urlpatterns = [
     path("api/", include(router.urls)),
     re_path('bookstore/(?P<version>(v1|v2))/', include('order.urls')),
     re_path('bookstore/(?P<version>(v1|v2))/', include('product.urls')),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
