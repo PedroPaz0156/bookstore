@@ -1,6 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 
 from product.models.category import Category
 from product.models.product import Product
@@ -15,8 +14,5 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.select_related("category").all()
-
-    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
     serializer_class = ProductSerializer
+    permission_classes = [AllowAny]
