@@ -7,8 +7,7 @@ from order.models.order import Order
 
 
 @pytest.mark.django_db
-def test_order_viewset_create_and_list():
-    client = APIClient()
+def test_order_viewset_create_and_list(api_client):
     payload = {
         "product": [
             {
@@ -30,7 +29,7 @@ def test_order_viewset_create_and_list():
         },
     }
 
-    create_response = client.post(reverse("order-list"), payload, format="json")
+    create_response = api_client.post(reverse("order-list"), payload, format="json")
 
     assert create_response.status_code == 201, create_response.data
     assert create_response.data["user"]["username"] == payload["user"]["username"]
@@ -38,9 +37,9 @@ def test_order_viewset_create_and_list():
     assert Order.objects.filter(user__username=payload["user"]["username"]).exists()
     assert User.objects.filter(username=payload["user"]["username"]).exists()
 
-    list_response = client.get(reverse("order-list"))
+    list_response = api_client.get(reverse("order-list"))
     assert list_response.status_code == 200
     assert any(
         item["user"]["username"] == payload["user"]["username"]
-        for item in list_response.data
+        for item in list_response.data["results"]
     )

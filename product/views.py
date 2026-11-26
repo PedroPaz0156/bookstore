@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+from rest_framework.permissions import AllowAny
+
 from product.models.category import Category
 from product.models.product import Product
 from product.serializers.category_serializer import CategorySerializer
@@ -13,3 +15,4 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.select_related("category").all()
     serializer_class = ProductSerializer
+    permission_classes = [AllowAny]

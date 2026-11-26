@@ -6,8 +6,7 @@ from product.models.product import Product
 
 
 @pytest.mark.django_db
-def test_product_viewset_create_and_list():
-    client = APIClient()
+def test_product_viewset_create_and_list(api_client):
     payload = {
         "name": "Dom Casmurro",
         "description": "Romance de Machado de Assis",
@@ -21,12 +20,12 @@ def test_product_viewset_create_and_list():
         },
     }
 
-    create_response = client.post(reverse("product-list"), payload, format="json")
+    create_response = api_client.post(reverse("product-list"), payload, format="json")
 
     assert create_response.status_code == 201, create_response.data
     assert create_response.data["name"] == payload["name"]
     assert Product.objects.filter(name=payload["name"]).exists()
 
-    list_response = client.get(reverse("product-list"))
+    list_response = api_client.get(reverse("product-list"))
     assert list_response.status_code == 200
-    assert any(item["name"] == payload["name"] for item in list_response.data)
+    assert any(item["name"] == payload["name"] for item in list_response.data["results"])
